@@ -3,7 +3,7 @@
 var guessArray = [];
 var counter = 0;
 var numToGuess = Math.floor((Math.random()*100) + 1);
-console.log(numToGuess);
+//console.log(numToGuess);
 
 
 //get the users guess and validate their input
