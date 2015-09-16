@@ -7,12 +7,12 @@ var wordSelector = Math.floor(Math.random()*19);
 var wordArray = [];
 var guessArray = [];
 var wordValidator = 0;
-var guessCounter = 0;
+var guessCounter = 1;
 //var guessHolder = [];
 
 console.log(wordSelector);
 
-//function ONE
+
 //call this function to start the game 
 //calls the next function
 function startGame() {
@@ -20,14 +20,13 @@ function startGame() {
     console.log("Here are the rules of the game");
     console.log("The computer will select a random word between 4 and 10 characters");
     console.log("You will input a single letter at each prompt.");
-    console.log("Guess 6 letters wrong and you are dead!");
+    console.log("Guess 5 letters wrong and you are dead!");
     console.log("Good Luck!");
     //calls function to generate a random word
     getWordList();
 }
 
 
-//function TWO
 //get a random word list of 20 words from WordNik, between 4 and 10 letters
 function getWordList() {
 var request = require('request');
@@ -48,21 +47,28 @@ request('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=tr
 });
 }
 
-
-startGame();
-
 //displays the word length in underscores by populating
 //the array that hold the guesses
 function displayWord(randWord) {
-    for (var i = 0; i <randWord.length; i++) {
-        guessArray.push("__")
+    for (var i = 0; i < randWord.length; i++) {
+        guessArray.push("__");
     }
     console.log("");
-    console.log("Guess this word: " + guessArray);
+    console.log("your word has " + randWord.length + " characters.") ; 
+    guessArrayToString(guessArray)
+    //console.log(guessArray);
     guessLetter(randWord);
 }
 
-
+//this function displays the user's gueses in a string
+//instead of an array
+function guessArrayToString() {
+    var guessString = ""
+    for (var i =0; i < guessArray.length; i++) {
+    guessString += guessArray[i] + " ";
+    }
+    console.log(guessString);
+}
 
 function guessLetter(randword) {
     console.log("");
@@ -76,49 +82,87 @@ function guessLetter(randword) {
         var guess = result.userGuess;
         //if user inputs more than one letter, uses the first one
         //changes input to lowercase
-        var guess = guess.charAt(0).toLowerCase();
+        guess.charAt(0).toLowerCase();
         //call function to check randword and userGuess
-        checkGuess(guess, randword)
+        checkGuess(guess, randword);
     });
 }
 
 function checkGuess(letterGuess, wordToGuess) {
-    var guessValidator = 0
+    var guessValidator = 0;
     for (var j = 0; j < wordToGuess.length; j++) {
         if (wordToGuess.charAt(j) === letterGuess) {
             guessArray[j] = letterGuess;
             guessValidator +=1;
-            wordValidator += 1
+            wordValidator += 1;
         }
     }
     
     if (guessValidator === 0) {
         guessCounter += 1;
         if (guessCounter < 6) {
+            //calls drawHangman function
+            drawHangman(guessCounter);
+            //draws the word
+            guessArrayToString();
             console.log("Oh no! You are one step closer to death!");
-            console.log("you have " + (6-guessCounter) + " guesses left!")
+            console.log("you have " + (6-guessCounter) + " guesses left!");
             //call guess again function
             guessLetter(wordToGuess);
         }
-        else {//call loose function
+        else {
         console.log("YOU LOOSE!");
-        console.log(guessArray);
+        hangManTemplate[2]  = "  |    x_x ";
+        drawHangman();
+        guessArrayToString();
+        console.log("The answer was: " + wordToGuess);
         }
     } 
     
     if (guessValidator > 0) {
         if (wordValidator < wordToGuess.length) {
-            console.log("Good Guess!")
-            console.log(guessArray);
+            //console.log("Good Guess!")
+            guessArrayToString();
             guessLetter(wordToGuess);
         }
         else {
         //call win function!
         console.log("YOU WIN!");
-        console.log(guessArray);
+        console.log("The word was: ")
+        guessArrayToString();
         }
     }
 }
 
-//continue until guessValidator = wordToGuess.length or
-//tries > 9
+//hangman drawing function
+var hangManTemplate = [];
+    hangManTemplate[0] = "  _________";
+    hangManTemplate[1] = "  |/    |  ";
+    hangManTemplate[2] = "  |        ";
+    hangManTemplate[3] = "  |        ";
+    hangManTemplate[4] = "  |        ";
+    hangManTemplate[5] = "  |        ";
+    hangManTemplate[6] = "  |        ";
+    hangManTemplate[7] = "  |        ";
+    hangManTemplate[8] = "__|____    ";
+
+var hungManTemplate = [];
+    hungManTemplate[0] = "  _________";
+    hungManTemplate[1] = "  |/    |  ";
+    hungManTemplate[2] = "  |    (_) ";
+    hungManTemplate[3] = "  |     |  ";
+    hungManTemplate[4] = "  |    \\|/ ";
+    hungManTemplate[5] = "  |     |  ";
+    hungManTemplate[6] = "  |    / \\ ";
+    hungManTemplate[7] = "  |        ";
+    hungManTemplate[8] = "__|____    ";
+
+function drawHangman() {
+    hangManTemplate[guessCounter] = hungManTemplate[guessCounter];
+    for (var i = 0; i<hangManTemplate.length; i++) {
+        console.log(hangManTemplate[i]);
+    }
+}
+
+
+startGame();
