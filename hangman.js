@@ -10,7 +10,7 @@ var wordValidator = 0;
 var guessCounter = 1;
 //var guessHolder = [];
 
-console.log(wordSelector);
+//console.log(wordSelector);
 
 
 //call this function to start the game 
@@ -42,7 +42,7 @@ request('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=tr
   }
   //pass the random selected word to the next function
   var randomWord = wordArray[wordSelector].toLowerCase();
-  console.log(randomWord);
+  //console.log(randomWord);
   displayWord(randomWord);
 });
 }
@@ -55,7 +55,7 @@ function displayWord(randWord) {
     }
     console.log("");
     console.log("your word has " + randWord.length + " characters.") ; 
-    guessArrayToString(guessArray)
+    guessArrayToString(guessArray);
     //console.log(guessArray);
     guessLetter(randWord);
 }
@@ -63,7 +63,7 @@ function displayWord(randWord) {
 //this function displays the user's gueses in a string
 //instead of an array
 function guessArrayToString() {
-    var guessString = ""
+    var guessString = "";
     for (var i =0; i < guessArray.length; i++) {
     guessString += guessArray[i] + " ";
     }
@@ -128,7 +128,7 @@ function checkGuess(letterGuess, wordToGuess) {
         else {
         //call win function!
         console.log("YOU WIN!");
-        console.log("The word was: ")
+        console.log("The word was: ");
         guessArrayToString();
         }
     }
