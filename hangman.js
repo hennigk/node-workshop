@@ -111,7 +111,7 @@ function checkGuess(letterGuess, wordToGuess) {
             guessLetter(wordToGuess);
         }
         else {
-        console.log("YOU LOOSE!");
+        console.log("YOU LOSE!");
         hangManTemplate[2]  = "  |    x_x ";
         drawHangman();
         guessArrayToString();
