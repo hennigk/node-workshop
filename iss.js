@@ -1,10 +1,12 @@
 
 //a program that displays the location of the space station!
 
+var request = require('request');
+var prompt = require('prompt');
+
 //prompt to user ask for their location. it then calls the map function.
 //function CALL ONE
 function getLocation() {
-var prompt = require('prompt');
   prompt.start();
   console.log("Enter the name if the city where you live: ");
   prompt.get('currentLocation', function (error, result) {
@@ -13,7 +15,7 @@ var prompt = require('prompt');
   }
   else {
     var userCity = result.currentLocation; 
-    console.log('Your current location is: ' + result.currentLocation);
+    console.log('\nYour current location is: ' + result.currentLocation);
     callMaps(userCity); //passes the user's city to the map Function
   }
   });
@@ -25,7 +27,6 @@ and the iss using the parameters from the request*/
 //function CALL TWO
 function callMaps(city) {
     var mapsHttps = "https://maps.googleapis.com/maps/api/geocode/json?address="+city;
-    var request = require('request');
     request(mapsHttps, function (error, response, body) {
         if (error) {
       console.log("there was an error!! Error = " + error);
@@ -34,7 +35,7 @@ function callMaps(city) {
         var bodyObject = JSON.parse(body);
         var cityLat = bodyObject.results[0].geometry.location.lat;
         var cityLong = bodyObject.results[0].geometry.location.lng;
-        console.log(city + " has the following location coordinates:");
+        console.log("\n" + city + " has the following location coordinates:");
         console.log("Latitude: " + cityLat.toFixed(2));
         console.log("Longitude: " + cityLong.toFixed(2));
         calcDistance(cityLat, cityLong, city); 
@@ -55,7 +56,6 @@ function calcDistance(userLat, userLong, cityName){
     //and calls haversince calculations
     //function CALL FOUR
     (function getISSCords () {
-    var request = require('request');
     request('http://api.open-notify.org/iss-now.json', function (error, response, body) {
     if (error) {
         console.log("there was an error!! Error = " + error);
@@ -64,7 +64,7 @@ function calcDistance(userLat, userLong, cityName){
     var bodyObject = JSON.parse(body);
         var issLat = bodyObject.iss_position.latitude;
         var issLong = bodyObject.iss_position.longitude;
-        console.log("The ISS is in the following position:");
+        console.log("\nThe ISS is in the following position:");
         console.log("Latitude: " + issLat.toFixed(2));
         console.log("Longitude: " + issLong.toFixed(2));
         haversineCalc(issLat, issLong);
@@ -87,7 +87,7 @@ function calcDistance(userLat, userLong, cityName){
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
         var distance = R * c; 
-        console.log("The distance between " + cityName + " and the ISS is:");
+        console.log("\nThe distance between " + cityName + " and the ISS is:");
         console.log(distance.toFixed(0) + " KM");
     }
 
